@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018-09-06
- * Time: 16:02:47
- */
 session_start();
 if(intval($_SESSION['uid']) < 1){
 	header("Location:user_login.php");
