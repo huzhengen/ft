@@ -1,29 +1,37 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
-import {
-    ListGroup,
-    ListGroupItem
-} from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { ListGroup, ListGroupItem , Button } from 'reactstrap';
+import { observer , inject } from 'mobx-react';
+import { Link } from 'react-router-dom';
 
-export default class Index extends Component {
+@inject("store")
+@observer
+export default class Index extends Component 
+{
+    componentDidMount()
+    {
+        this.props.store.get_all_resume();
+    }
+    
+    render()
+    {
+        const resume_list = this.props.store.all_resume_list;
+        return <div>
+            <h1 className="page-title">最新简历</h1>
+            <ListGroup className="resume-list">
+            {resume_list.length > 0 && resume_list.map( ( item ) => 
+                {
+                    return <ListGroupItem  action key={item.id}>
+                    <Button tag="a" href={"/resume/"+item.id} color="light" target="_blank">{item.title}</Button> 
 
-  render() {
-    return (
-        <div className="container">
-          <h3>最新简历</h3>
-          <ListGroup>
-            <ListGroupItem tag="a" href="#" action>Cras justo odio <img src="open_in_new.png" alt=""/></ListGroupItem>
-            <ListGroupItem tag="a" href="#" action>Dapibus ac facilisis in</ListGroupItem>
-            <ListGroupItem tag="a" href="#">Morbi leo risus</ListGroupItem>
-            <ListGroupItem tag="a" href="#">Porta ac consectetur ac</ListGroupItem>
-            <ListGroupItem tag="a" href="#">Vestibulum at eros</ListGroupItem>
-          </ListGroup>
-        </div>
-    );
-  }
+                        <Link to={"/resume/"+item.id}  target="_blank"><img src="/open_in_new.png" alt="查看" className="actionIcon"/></Link>
+
+                    </ListGroupItem>;
+                } )}
+             {resume_list.length === 0 && <p>还没有简历</p> }
+
+            
+
+            </ListGroup>
+        </div>;
+    }
 }

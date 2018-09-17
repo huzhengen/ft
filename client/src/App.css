@@ -1,7 +1,48 @@
-.App{
-  max-width: 600px;
-  margin: 0 auto;
+.App
+{
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  max-width:600px;
+  /* background-color: bisque; */
+  min-height:100vh;
 }
-.main{
-  padding-top: 10px;
+
+.header
+{
+  flex:1;
+  min-height: 80px;
+  /* background-color: brown; */
 }
+
+.main
+{
+  flex:20;
+  padding:20px;
+  /* background-color: cornflowerblue; */
+}
+
+h1.page-title, .content h1 
+{
+  color: #ccc;
+  font-weight: 400;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.textBox
+{
+  min-height:100px;
+}
+
+.actionBox
+{
+  margin-top:30px;
+}
+
+.actionIcon
+{
+  margin-left:10px;
+}
+

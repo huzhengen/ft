@@ -19,7 +19,8 @@ class User
             unset( $_SESSION[$key] );
         }
 
-        header( "Location: /" );
+        // header( "Location: /" );
+        return send_json(['msg'=>'退出成功']);
     }
 
     public function register()
@@ -52,7 +53,8 @@ class User
 
         $ret = run_sql( $sql , [ $email , password_hash( $password , PASSWORD_DEFAULT ) , date( "Y-m-d H:i:s" )  ] , 1062 , "Email地址已被注册" );
 
-        echo $info = "用户注册成功<script>location='/?m=user&a=login'</script>";
+        // echo $info = "用户注册成功<script>location='/?m=user&a=login'</script>";
+        send_json(['msg'=>'用户注册成功']);
         return $info;
         
     }
@@ -72,14 +74,11 @@ class User
         {
             e("Email 地址错误");
         }
-
         
         if( $user_list = get_data( "SELECT * FROM `user` WHERE `email` = ? LIMIT 1" , [ $email ] ))
         {
             $user = $user_list[0];
         }
-        
-
         
         if( !password_verify( $password , $user['password'] ) )
         {
@@ -87,15 +86,15 @@ class User
             e("错误的Email地址或者密码");
         }
 
-        
-
         session_start();
         $_SESSION['email'] = $email;
         $_SESSION['uid'] = $user['id'];
 
-        echo "登入成功<script>location='/?m=resume&a=list'</script>";
+        $token = session_id();
+
+        // echo "登入成功<script>location='/?m=resume&a=list'</script>";
+        send_json(['token'=>$token, 'msg'=>'登入成功']);
         return true;
-        
 
     }
 }

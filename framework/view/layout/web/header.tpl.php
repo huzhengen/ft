@@ -20,7 +20,7 @@
     ?>
     <?php if( is_login() ): ?>
     <ul class="navbar-nav">
-        <li class="nav-item <?=active_class('resume', 'list')?>"><a href="?m=resume&a=list" class="nav-link" ><span class="menu-square"></span>我的简历</a></li>
+        <li class="nav-item <?=active_class('resume', 'lists')?>"><a href="?m=resume&a=list" class="nav-link" ><span class="menu-square"></span>我的简历</a></li>
         <li class="nav-item <?=active_class('user','logout')?>" ><a href="?m=user&a=logout" class="nav-link" ><span class="menu-square"></span>退出</a></li>
     </ul>
     <?php else: ?>

@@ -1,57 +1,52 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import $ from 'jquery';
+import { Button, Form, FormGroup, Input } from 'reactstrap';
+import { observer , inject } from 'mobx-react';
+import { Redirect } from 'react-router-dom';
 
-export default class Index extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            'email': '',
-            'passowrd': ''
-        };
+@inject("store")
+@observer
+export default class Login extends Component 
+{
+
+    constructor(props)
+    {
+        super( props );
+        this.state = {"email":"","password":"","redir":false};
     }
 
-    handleChange(e, field){
-        console.log(field)
-        console.log(e.target.value)
-
-        this.setState({
-            field: e.target.value
-        });
+    async login()
+    {
+        const data = await this.props.store.login( this.state.email , this.state.password );
+        if( parseInt( data.code , 10 ) === 0  )
+            this.setState({"redir":true});
+        else
+            alert( data.error ); 
     }
 
-    login(){
-        console.log('login');
-        $.post('http://localhost/?m=user&a=login_check', {
-            'email': this.state.email,
-            'password': this.state.password
-        }, (data)=>{
-            console.log(data);
-        })
+    handleChange( e , field )
+    {
+        //console.log("in change~ "+field+e.target.value );
+        let o = {};
+        o[field] = e.target.value;
+        this.setState( o );
     }
-
-    render() {
-        return (
-            <div className="container">
-                <h3>登录</h3>
-                <Form>
-                    <FormGroup>
-                        <Label for="exampleEmail">Email</Label>
-                        <Input type="email" name="email" id="exampleEmail" placeholder="Email" onChange={(e)=>this.handleChange(e, 'email')} />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="examplePassword">Password</Label>
-                        <Input type="password" name="password" id="examplePassword" placeholder="password" value={this.state.password} onChange={(e)=>this.handleChange(e, 'password')} />
-                    </FormGroup>
-                    <Button color="primary" onClick={this.login()}>Submit</Button>
-                </Form>
-            </div>
-        );
+    
+    render()
+    {
+        return <div>
+            <h1 className="page-title">用户登入{this.props.store.token}</h1>
+            <Form>
+                <FormGroup>
+                <Input type="email" name="email"  placeholder="Email" value={this.state.email} onChange={(e)=>{this.handleChange(e,"email");}}/>
+                </FormGroup>
+                <FormGroup>
+                <Input type="password" name="password"  placeholder="密码（6~12个字符）" value={this.state.password} onChange={(e)=>{this.handleChange(e,"password");}}/>
+                </FormGroup>
+                <FormGroup>
+                <Button color="primary" onClick={()=>this.login()}>登入</Button>
+                </FormGroup>
+                {  this.state.redir && <Redirect to="/myresume"/> }
+        </Form>
+        </div>;
     }
 }
